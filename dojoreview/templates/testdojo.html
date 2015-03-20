@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/myApp/widget/css/demo.css" media="screen">
+	<link rel="stylesheet" href="/static/myApp/widget/css/AuthorWidget.css" media="screen">
+    <title></title>
+</head>
+<body>
+	<div class="authorContainer">
+		<h2>Test Dojo</h2>
+    </div>
+	<script>
+		 var dojoConfig = (function(){
+			var base = location.href.split("/");
+
+			base.pop();
+			base = base.join("/");
+			return {
+				async: true,
+				isDebug: true,
+				packages: [{
+					name: "myApp",
+					location: base + "/static/myApp"
+				}]
+			};
+		})();
+    </script>
+	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.3/dojo/dojo.js"></script>
+	<script>
+		require(["dojo/request", "dojo/dom", "dojo/_base/array", "myApp/widget/AuthorWidget",
+            "dojo/domReady!"],
+			function(request, dom, arrayUntil, AuthorWidget){
+				request("/static/myApp/data/authors.json", {
+                    handleAs: "json"
+                }).then(function(authors){
+					var authorContainer = dom.byId("authorContainer");
+					arrayUntil.forEach(authors, function(author){
+						// Create our widget and place it
+						var widget = new AuthorWidget(author).placeAt(authorContainer);
+					});
+                })
+            }
+        )
+    </script>
+</body>
+</html>
