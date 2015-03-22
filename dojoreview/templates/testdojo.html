@@ -7,11 +7,11 @@
     <title></title>
 </head>
 <body>
-	<div class="authorContainer">
-		<h2>Test Dojo</h2>
+	<div id="authorContainer">
+        test DOJO
     </div>
 	<script>
-		 var dojoConfig = (function(){
+		 var dojoConfig  = (function(){
 			var base = location.href.split("/");
 
 			base.pop();
@@ -28,20 +28,21 @@
     </script>
 	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.3/dojo/dojo.js"></script>
 	<script>
-		require(["dojo/request", "dojo/dom", "dojo/_base/array", "myApp/widget/AuthorWidget",
-            "dojo/domReady!"],
-			function(request, dom, arrayUntil, AuthorWidget){
-				request("/static/myApp/data/authors.json", {
-                    handleAs: "json"
-                }).then(function(authors){
-					var authorContainer = dom.byId("authorContainer");
-					arrayUntil.forEach(authors, function(author){
-						// Create our widget and place it
-						var widget = new AuthorWidget(author).placeAt(authorContainer);
-					});
-                })
-            }
-        )
+		// Bring in our custom widget
+			require(["dojo/request", "dojo/dom", "dojo/_base/array", "myApp/widget/AuthorWidget",'dojo/_base/window', 'dojo/ready','dojo/_base/config', 'dojo/parser', "dojo/domReady!"],
+				function(request, dom, arrayUtil, AuthorWidget, win, ready, config, parser){
+					// Load up our authors
+					ready(function() {
+                        request("static/myApp/data/authors.json", {
+                            handleAs: "json"
+                    }).then(function(authors){
+                            var authorContainer = dom.byId("authorContainer");
+                            arrayUtil.forEach(authors, function(author){
+                            var widget = new AuthorWidget(author).placeAt(authorContainer);
+                        });
+                    });
+                });
+			});
     </script>
 </body>
 </html>
